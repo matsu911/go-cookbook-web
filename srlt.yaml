@@ -1,0 +1,12 @@
+base: ./vendor
+dependencies:
+  github.com/codegangsta/gin:
+    type: git
+    name: github.com/codegangsta/gin
+    remote: https://github.com/codegangsta/gin
+    commit: 20c9707f2046c2a1019cea9659931731cf15a7dd
+  github.com/gin-gonic/gin:
+    type: git
+    name: github.com/gin-gonic/gin
+    remote: https://github.com/gin-gonic/gin
+    commit: 31e4401f017591d5e03bdd883449b6e80a305227
