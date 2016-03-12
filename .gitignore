@@ -1,5 +1,6 @@
 test-results/
 tmp/
 routes/
+vendor/
 *~
 gin-bin
