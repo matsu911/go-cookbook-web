@@ -10,3 +10,13 @@ dependencies:
     name: github.com/gin-gonic/gin
     remote: https://github.com/gin-gonic/gin
     commit: 31e4401f017591d5e03bdd883449b6e80a305227
+  github.com/russross/blackfriday:
+    type: git
+    name: github.com/russross/blackfriday
+    remote: https://github.com/russross/blackfriday
+    commit: 006144af03eeeff1037240a71865a9fd61f1c25f
+  github.com/shurcooL/sanitized_anchor_name:
+    type: git
+    name: github.com/shurcooL/sanitized_anchor_name
+    remote: https://github.com/shurcooL/sanitized_anchor_name
+    commit: 10ef21a441db47d8b13ebcc5fd2310f636973c77
