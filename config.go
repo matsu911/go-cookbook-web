@@ -15,7 +15,8 @@ type Config struct {
 }
 
 func (cfg Config) String(key string) (string, error) {
-	return cfg.Config.String(fmt.Sprintf("%s.%s", "development", key))
+	env := os.Getenv("GIN_ENV")
+	return cfg.Config.String(fmt.Sprintf("%s.%s", env, key))
 }
 
 func connectDB() *gorm.DB {

@@ -2,17 +2,22 @@ package main
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/joho/godotenv"
 	"github.com/russross/blackfriday"
 )
 
 func main() {
-	os.Setenv("GIN_ENV", "development")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	connectDB()
 	router := gin.Default()
 	router.Static("/assets", "public/assets")
