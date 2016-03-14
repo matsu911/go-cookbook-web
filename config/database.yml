@@ -1,0 +1,4 @@
+development:
+  database: go_cookbook
+  user: go_cookbook
+  password: go_cookbook

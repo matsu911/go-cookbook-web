@@ -20,3 +20,33 @@ dependencies:
     name: github.com/shurcooL/sanitized_anchor_name
     remote: https://github.com/shurcooL/sanitized_anchor_name
     commit: 10ef21a441db47d8b13ebcc5fd2310f636973c77
+  github.com/jinzhu/gorm:
+    type: git
+    name: github.com/jinzhu/gorm
+    remote: https://github.com/jinzhu/gorm
+    commit: 83002c4d5f060f4819bfd2115b76a0e1429a7f32
+  github.com/go-sql-driver/mysql:
+    type: git
+    name: github.com/go-sql-driver/mysql
+    remote: https://github.com/go-sql-driver/mysql
+    commit: 66312f7fe2678aa0f5ec770f96702f4c4ec5aa8e
+  github.com/jinzhu/inflection:
+    type: git
+    name: github.com/jinzhu/inflection
+    remote: https://github.com/jinzhu/inflection
+    commit: 3272df6c21d04180007eb3349844c89a3856bc25
+  github.com/olebedev/config:
+    type: git
+    name: github.com/olebedev/config
+    remote: https://github.com/olebedev/config
+    commit: e3edea7d68b76222b5118cc2e1cf3825e30abb80
+  # github.com/robfig/config:
+  #   type: git
+  #   name: github.com/robfig/config
+  #   remote: https://github.com/robfig/config
+  #   commit: 0f78529c8c7e3e9a25f15876532ecbc07c7d99e6
+  # github.com/go-yaml/yaml:
+  #   type: git
+  #   name: github.com/go-yaml/yaml
+  #   remote: https://github.com/go-yaml/yaml
+  #   commit: a83829b6f1293c91addabc89d0571c246397bbf4

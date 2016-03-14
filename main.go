@@ -6,10 +6,14 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/russross/blackfriday"
 )
 
 func main() {
+	os.Setenv("GIN_ENV", "development")
+	connectDB()
 	router := gin.Default()
 	router.Static("/assets", "public/assets")
 	router.LoadHTMLGlob("views/*")
