@@ -1,0 +1,12 @@
+{{define "documents/show.html"}}
+{{template "layout/before.html" .}}
+<!-- Begin page content -->
+<div class="container">
+  <div class="page-header">
+    <h1>Go言語クックブックはGo言語のレシピ集です</h1>
+  </div>
+  {{.title}}
+  {{.content}}
+</div>
+{{template "layout/after.html" .}}
+{{end}}
