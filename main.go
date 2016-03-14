@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/matsu911/go-cookbook-web/app"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
@@ -18,7 +19,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	connectDB()
+	app.ConnectDB()
 	router := gin.Default()
 	router.Static("/assets", "public/assets")
 	router.LoadHTMLGlob("views/*")

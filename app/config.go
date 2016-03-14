@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ func (cfg Config) String(key string) (string, error) {
 	return cfg.Config.String(fmt.Sprintf("%s.%s", env, key))
 }
 
-func connectDB() *gorm.DB {
+func ConnectDB() *gorm.DB {
 	path := "config/database.yml"
 	file, err := os.Open(path) // For read access.
 	if err != nil {
