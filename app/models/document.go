@@ -7,5 +7,6 @@ import (
 
 type Document struct {
 	gorm.Model
-	Text string `gorm:text`
+	Text string `gorm:"type:text"`
+	Slug string `gorm:"size:255;index"`
 }

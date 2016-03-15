@@ -7,5 +7,5 @@ import (
 
 func main() {
 	db := app.ConnectDB()
-	db.CreateTable(&models.Document{})
+	db.AutoMigrate(&models.Document{})
 }

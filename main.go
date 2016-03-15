@@ -2,17 +2,61 @@ package main
 
 import (
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
-	"github.com/matsu911/go-cookbook-web/app"
-
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/joho/godotenv"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/engine/standard"
+	"github.com/labstack/echo/middleware"
+	"github.com/matsu911/go-cookbook-web/app"
 	"github.com/russross/blackfriday"
 )
+
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+// Handler
+func hello() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		data := map[string]string{
+			"title": "test",
+		}
+		return c.Render(http.StatusOK, "home/index.html", data)
+	}
+}
+
+func hello2() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return c.HTML(http.StatusOK, string(blackfriday.MarkdownBasic(([]byte)("# test"))))
+	}
+}
+
+func documentsNew() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return c.Render(http.StatusOK, "documents/new.html", nil)
+	}
+}
+
+func documentsShow() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return c.Render(http.StatusOK, "documents/show.html", nil)
+	}
+}
+
+func adminDocumentsShow() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return c.Render(http.StatusOK, "documents/show.html", nil)
+	}
+}
 
 func main() {
 	err := godotenv.Load()
@@ -20,37 +64,35 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	app.ConnectDB()
-	router := gin.Default()
-	router.Static("/assets", "public/assets")
-	router.LoadHTMLGlob("views/**/*.html")
-	//router.LoadHTMLFiles("templates/template1.html", "templates/template2.html")
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "home/index.html", gin.H{
-			"title": "test",
-		})
+	// Echo instance
+	e := echo.New()
+	e.SetRenderer(&Template{
+		templates: template.Must(template.ParseGlob("views/**/*.html")),
 	})
-	router.GET("/documents/:id", func(c *gin.Context) {
-		content := template.HTML(blackfriday.MarkdownBasic(([]byte)("# test")))
-		c.HTML(http.StatusOK, "documents/show.html", gin.H{
-			"title":   "test",
-			"content": content,
-		})
-	})
-	authorized := router.Group("/admin", gin.BasicAuth(gin.Accounts{
-		"foo":    "bar",
-		"austin": "1234",
-		"lena":   "hello2",
-		"manu":   "4321",
+
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Routes
+	e.Static("/assets", "public/assets")
+	e.Get("/", hello())
+	e.Get("/documents/new", documentsNew())
+	e.Get("/documents/:id", documentsShow())
+
+	admin := e.Group("/admin", middleware.BasicAuth(func(usr, pwd string) bool {
+		if usr == "joe" && pwd == "secret" {
+			return true
+		}
+		return false
 	}))
-	authorized.GET("/", func(c *gin.Context) {
-	})
-	authorized.GET("/documents/:id", func(c *gin.Context) {
-		// get user, it was set by the BasicAuth middleware
-		c.JSON(http.StatusOK, gin.H{"user": "aa", "secret": "bbb"})
-	})
+	admin.Get("/documents/:id", adminDocumentsShow())
+
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "3000"
 	}
-	router.Run(":" + port)
+
+	// Start server
+	e.Run(standard.New(":" + port))
 }

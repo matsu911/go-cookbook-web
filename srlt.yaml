@@ -1,5 +1,40 @@
 base: ./vendor
 dependencies:
+  github.com/kardianos/osext:
+    type: git
+    name: github.com/kardianos/osext
+    remote: https://github.com/kardianos/osext
+    commit: 29ae4ffbc9a6fe9fb2bc5029050ce6996ea1d3bc
+  github.com/daaku/go.zipexe:
+    type: git
+    name: github.com/daaku/go.zipexe
+    remote: https://github.com/daaku/go.zipexe
+    commit: a5fe2436ffcb3236e175e5149162b41cd28bd27d
+  github.com/GeertJohan/go.rice:
+    type: git
+    name: github.com/GeertJohan/go.rice
+    remote: https://github.com/GeertJohan/go.rice
+    commit: 0f3f5fde32fd1f755632a3d31ba2ec6d449e387b
+  github.com/mattn/go-isatty:
+    type: git
+    name: github.com/mattn/go-isatty
+    remote: https://github.com/mattn/go-isatty
+    commit: 56b76bdf51f7708750eac80fa38b952bb9f32639
+  github.com/mattn/go-colorable:
+    type: git
+    name: github.com/mattn/go-colorable
+    remote: https://github.com/mattn/go-colorable
+    commit: 9cbef7c35391cca05f15f8181dc0b18bc9736dbb
+  github.com/labstack/gommon:
+    type: git
+    name: github.com/labstack/gommon
+    remote: https://github.com/labstack/gommon
+    commit: c7a42f4800da9d39225ce15411f48288d622e517
+  github.com/labstack/echo:
+    type: git
+    name: github.com/labstack/echo
+    remote: https://github.com/labstack/echo
+    commit: 00bf0d651f1eb72123cf3f14f757688423b7cebb
   github.com/codegangsta/gin:
     type: git
     name: github.com/codegangsta/gin
