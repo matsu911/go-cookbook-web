@@ -13,6 +13,7 @@ import (
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 	"github.com/matsu911/go-cookbook-web/app"
+	"github.com/matsu911/go-cookbook-web/app/controllers"
 	"github.com/russross/blackfriday"
 )
 
@@ -24,37 +25,9 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-// Handler
-func hello() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		data := map[string]string{
-			"title": "test",
-		}
-		return c.Render(http.StatusOK, "home/index.html", data)
-	}
-}
-
 func hello2() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return c.HTML(http.StatusOK, string(blackfriday.MarkdownBasic(([]byte)("# test"))))
-	}
-}
-
-func documentsNew() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.Render(http.StatusOK, "documents/new.html", nil)
-	}
-}
-
-func documentsShow() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.Render(http.StatusOK, "documents/show.html", nil)
-	}
-}
-
-func adminDocumentsShow() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.Render(http.StatusOK, "documents/show.html", nil)
 	}
 }
 
@@ -74,11 +47,14 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	adminController := new(controllers.AdminController)
+	topController := new(controllers.TopController)
+	documentsController := new(controllers.DocumentsController)
+
 	// Routes
 	e.Static("/assets", "public/assets")
-	e.Get("/", hello())
-	e.Get("/documents/new", documentsNew())
-	e.Get("/documents/:id", documentsShow())
+	e.Get("/", topController.Index())
+	e.Get("/documents/:id", documentsController.Show())
 
 	admin := e.Group("/admin", middleware.BasicAuth(func(usr, pwd string) bool {
 		if usr == "joe" && pwd == "secret" {
@@ -86,7 +62,8 @@ func main() {
 		}
 		return false
 	}))
-	admin.Get("/documents/:id", adminDocumentsShow())
+	admin.Get("/documents/new", adminController.DocumentsNew())
+	admin.Get("/documents/:id", adminController.DocumentsShow())
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
