@@ -1,0 +1,5 @@
+gom 'github.com/labstack/echo'
+gom 'github.com/russross/blackfriday'
+gom 'github.com/jinzhu/gorm'
+gom 'github.com/go-sql-driver/mysql'
+gom 'github.com/joho/godotenv'
