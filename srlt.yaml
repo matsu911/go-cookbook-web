@@ -95,6 +95,11 @@ dependencies:
     name: github.com/mattn/go-sqlite3
     remote: https://github.com/mattn/go-sqlite3
     commit: 76e335f60bbcee20755df9864f0153af1a80ad2d
+  github.com/mattn/go-zglob:
+    type: git
+    name: github.com/mattn/go-zglob
+    remote: https://github.com/mattn/go-zglob
+    commit: 249e8bceca8cd265110a08bbb63303fb9db47445
   github.com/olebedev/config:
     type: git
     name: github.com/olebedev/config

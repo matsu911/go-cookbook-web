@@ -14,6 +14,7 @@ import (
 	"github.com/labstack/echo/middleware"
 	"github.com/matsu911/go-cookbook-web/app"
 	"github.com/matsu911/go-cookbook-web/app/controllers"
+	zglob "github.com/mattn/go-zglob"
 	"github.com/russross/blackfriday"
 )
 
@@ -36,20 +37,24 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	app.ConnectDB()
+	db := app.ConnectDB()
 	// Echo instance
 	e := echo.New()
+	if os.Getenv("GIN_ENV") == "development" {
+		e.SetDebug(true)
+	}
+	matches, err := zglob.Glob("views/**/*.html")
 	e.SetRenderer(&Template{
-		templates: template.Must(template.ParseGlob("views/**/*.html")),
+		templates: template.Must(template.ParseFiles(matches...)),
 	})
 
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	adminController := new(controllers.AdminController)
-	topController := new(controllers.TopController)
-	documentsController := new(controllers.DocumentsController)
+	adminController := &controllers.AdminController{DB: db}
+	topController := &controllers.TopController{}
+	documentsController := &controllers.DocumentsController{}
 
 	// Routes
 	e.Static("/assets", "public/assets")
@@ -62,6 +67,9 @@ func main() {
 		}
 		return false
 	}))
+	admin.Get("", adminController.Index())
+	admin.Get("/", adminController.Index())
+	admin.Get("/documents", adminController.DocumentsIndex())
 	admin.Get("/documents/new", adminController.DocumentsNew())
 	admin.Get("/documents/:id", adminController.DocumentsShow())
 
