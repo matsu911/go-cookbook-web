@@ -71,6 +71,7 @@ func main() {
 	admin.Get("/", adminController.Index())
 	admin.Get("/documents", adminController.DocumentsIndex())
 	admin.Get("/documents/new", adminController.DocumentsNew())
+	admin.Post("/documents/create", adminController.DocumentsCreate())
 	admin.Get("/documents/:id", adminController.DocumentsShow())
 
 	port := os.Getenv("PORT")

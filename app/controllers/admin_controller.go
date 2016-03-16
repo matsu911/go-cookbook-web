@@ -36,6 +36,12 @@ func (*AdminController) DocumentsNew() echo.HandlerFunc {
 	}
 }
 
+func (*AdminController) DocumentsCreate() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return c.Redirect(http.StatusFound, "/admin/documents")
+	}
+}
+
 func (*AdminController) DocumentsShow() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return c.Render(http.StatusOK, "admin/documents/show.html", nil)
