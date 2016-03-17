@@ -35,7 +35,7 @@ func main() {
 	if os.Getenv("GIN_ENV") == "development" {
 		e.SetDebug(true)
 	}
-	matches, err := zglob.Glob("app/views/**/*.html")
+	matches, err := zglob.Glob("views/**/*.html")
 	e.SetRenderer(&Template{
 		templates: template.Must(template.ParseFiles(matches...)),
 	})
