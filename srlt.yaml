@@ -45,6 +45,11 @@ dependencies:
     name: github.com/joho/godotenv
     remote: https://github.com/joho/godotenv
     commit: 4ed13390c0acd2ff4e371e64d8b97c8954138243
+  github.com/jteeuwen/go-bindata:
+    type: git
+    name: github.com/jteeuwen/go-bindata
+    remote: https://github.com/jteeuwen/go-bindata
+    commit: a0ff2567cfb70903282db057e799fd826784d41d
   github.com/kardianos/osext:
     type: git
     name: github.com/kardianos/osext
