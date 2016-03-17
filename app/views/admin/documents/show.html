@@ -1,0 +1,13 @@
+{{define "admin/documents/show.html"}}
+{{template "layout/before.html" .}}
+<!-- Begin page content -->
+<div class="container">
+  {{with .doc}}
+  <div class="page-header">
+    <h1>{{.Title}} <small>{{.Slug}}</small></h1>
+  </div>
+  {{.Content}}
+  {{end}}
+</div>
+{{template "layout/after.html" .}}
+{{end}}

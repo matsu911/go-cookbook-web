@@ -3,16 +3,23 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
+	"github.com/matsu911/go-cookbook-web/app/models"
 )
 
-type TopController struct{}
+type TopController struct {
+	DB *gorm.DB
+}
 
-func (TopController) Index() echo.HandlerFunc {
+func (controller *TopController) Index() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		data := map[string]string{
-			"title": "test",
+		var doc models.Document
+		controller.DB.Where(&models.Document{Slug: "/"}).First(&doc)
+		data := map[string]interface{}{
+			"title": doc.Title,
+			"doc":   doc,
 		}
-		return c.Render(http.StatusOK, "home/index.html", data)
+		return c.Render(http.StatusOK, "index.html", data)
 	}
 }

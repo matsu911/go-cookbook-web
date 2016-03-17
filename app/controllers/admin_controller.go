@@ -23,7 +23,7 @@ func (controller *AdminController) DocumentsIndex() echo.HandlerFunc {
 		var documents []models.Document
 		controller.DB.Find(&documents)
 		data := map[string]interface{}{
-			"title": "aaaa",
+			"title": "ドキュメント一覧",
 			"docs":  documents,
 		}
 		return c.Render(http.StatusOK, "admin/documents/index.html", data)
@@ -36,14 +36,48 @@ func (*AdminController) DocumentsNew() echo.HandlerFunc {
 	}
 }
 
-func (*AdminController) DocumentsCreate() echo.HandlerFunc {
+func (controller *AdminController) DocumentsCreate() echo.HandlerFunc {
 	return func(c echo.Context) error {
+		title := c.Form("title")
+		slug := c.Form("slug")
+		content := c.Form("content")
+		controller.DB.Create(&models.Document{Title: title, Slug: slug, Text: content})
 		return c.Redirect(http.StatusFound, "/admin/documents")
 	}
 }
 
-func (*AdminController) DocumentsShow() echo.HandlerFunc {
+func (controller *AdminController) DocumentsUpdate() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return c.Render(http.StatusOK, "admin/documents/show.html", nil)
+		var doc models.Document
+		controller.DB.Find(&doc, c.Param("id"))
+		doc.Title = c.Form("title")
+		doc.Slug = c.Form("slug")
+		doc.Text = c.Form("content")
+		controller.DB.Save(&doc)
+		return c.Redirect(http.StatusFound, "/admin/documents")
+	}
+}
+
+func (controller *AdminController) DocumentsEdit() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var doc models.Document
+		controller.DB.Find(&doc, c.Param("id"))
+		data := map[string]interface{}{
+			"title": doc.Title,
+			"doc":   doc,
+		}
+		return c.Render(http.StatusOK, "admin/documents/edit.html", data)
+	}
+}
+
+func (controller *AdminController) DocumentsShow() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		var doc models.Document
+		controller.DB.Find(&doc, c.Param("id"))
+		data := map[string]interface{}{
+			"title": doc.Title,
+			"doc":   doc,
+		}
+		return c.Render(http.StatusOK, "admin/documents/show.html", data)
 	}
 }

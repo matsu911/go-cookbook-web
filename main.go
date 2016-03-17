@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"io"
 	"log"
-	"net/http"
 	"os"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -15,7 +14,6 @@ import (
 	"github.com/matsu911/go-cookbook-web/app"
 	"github.com/matsu911/go-cookbook-web/app/controllers"
 	zglob "github.com/mattn/go-zglob"
-	"github.com/russross/blackfriday"
 )
 
 type Template struct {
@@ -24,12 +22,6 @@ type Template struct {
 
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-func hello2() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.HTML(http.StatusOK, string(blackfriday.MarkdownBasic(([]byte)("# test"))))
-	}
 }
 
 func main() {
@@ -43,7 +35,7 @@ func main() {
 	if os.Getenv("GIN_ENV") == "development" {
 		e.SetDebug(true)
 	}
-	matches, err := zglob.Glob("views/**/*.html")
+	matches, err := zglob.Glob("app/views/**/*.html")
 	e.SetRenderer(&Template{
 		templates: template.Must(template.ParseFiles(matches...)),
 	})
@@ -53,16 +45,16 @@ func main() {
 	e.Use(middleware.Recover())
 
 	adminController := &controllers.AdminController{DB: db}
-	topController := &controllers.TopController{}
-	documentsController := &controllers.DocumentsController{}
+	topController := &controllers.TopController{DB: db}
+	documentsController := &controllers.DocumentsController{DB: db}
 
 	// Routes
 	e.Static("/assets", "public/assets")
 	e.Get("/", topController.Index())
-	e.Get("/documents/:id", documentsController.Show())
+	e.Get("/documents/*", documentsController.Show())
 
 	admin := e.Group("/admin", middleware.BasicAuth(func(usr, pwd string) bool {
-		if usr == "joe" && pwd == "secret" {
+		if usr == os.Getenv("BASIC_AUTH_ID") && pwd == os.Getenv("BASIC_AUTH_PASSWORD") {
 			return true
 		}
 		return false
@@ -73,6 +65,8 @@ func main() {
 	admin.Get("/documents/new", adminController.DocumentsNew())
 	admin.Post("/documents/create", adminController.DocumentsCreate())
 	admin.Get("/documents/:id", adminController.DocumentsShow())
+	admin.Get("/documents/:id/edit", adminController.DocumentsEdit())
+	admin.Post("/documents/:id/update", adminController.DocumentsUpdate())
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
